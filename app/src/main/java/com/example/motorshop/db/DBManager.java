@@ -7,11 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.motorshop.datasrc.BaoHanh;
 import com.example.motorshop.datasrc.BoPhan;
+import com.example.motorshop.datasrc.ChiTietBaoHanh;
 import com.example.motorshop.datasrc.NhaCungCap;
 import com.example.motorshop.datasrc.NhanVien;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBManager extends SQLiteOpenHelper {
 
@@ -253,4 +256,60 @@ public class DBManager extends SQLiteOpenHelper {
 
 //CAC PHAN CON LAI TUONG TU
 
+    public void addBaoHanh(BaoHanh baoHanh) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues values = new ContentValues();
+    values.put("MABH", baoHanh.getMaBH());
+    values.put("MADH", baoHanh.getMaDH());
+    values.put("NGAYBH", baoHanh.getNgayBH());
+    values.put("MANV", baoHanh.getMaNV());
+
+    db.insert("BAOHANH", null, values);
+    db.close();
+    Log.d(TAG, "add BAOHANH thanh cong!");
+    Log.d(TAG, baoHanh.getMaBH()+", "+baoHanh.getMaDH()+", "+baoHanh.getNgayBH()+", "+baoHanh.getMaNV());
+}
+
+    public ArrayList<BaoHanh> getAllBaoHanh() {
+        ArrayList<BaoHanh> baoHanhArrayList = new ArrayList<>();
+
+        String selectQueryNCC = "SELECT * FROM " + "BAOHANH";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQueryNCC, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                BaoHanh baoHanh = new BaoHanh();
+                baoHanh.setMaBH(cursor.getString(0));
+                baoHanh.setMaDH(cursor.getString(1));
+                baoHanh.setNgayBH(cursor.getString(2));
+                baoHanh.setMaNV(cursor.getString(3));
+                baoHanhArrayList.add(baoHanh);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        cursor.close();
+        return baoHanhArrayList;
+    }
+
+    public ArrayList<ChiTietBaoHanh> getAllChiTietBaoHanh() {
+        ArrayList<ChiTietBaoHanh> chiTietBaoHanhs = new ArrayList<>();
+
+        String selectQueryNCC = "SELECT * FROM " + "CHITIETBAOHANHXE";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQueryNCC, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                ChiTietBaoHanh chiTietBaoHanh = new ChiTietBaoHanh();
+                chiTietBaoHanh.setMaBH(cursor.getString(0));
+                chiTietBaoHanh.setMaDH(cursor.getString(1));
+                chiTietBaoHanh.setNgayBH(cursor.getString(2));
+                chiTietBaoHanh.setMaNV(cursor.getString(3));
+                chiTietBaoHanhs.add(chiTietBaoHanh);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        cursor.close();
+        return chiTietBaoHanhs;
+    }
 }

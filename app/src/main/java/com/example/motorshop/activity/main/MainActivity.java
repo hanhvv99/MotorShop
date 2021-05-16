@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.motorshop.activity.R;
 import com.example.motorshop.activity.brand.BrandActivity;
+import com.example.motorshop.activity.guarantee.GuaranteeActivity;
 import com.example.motorshop.activity.product.ProductActivity;
 import com.example.motorshop.datasrc.MainItem;
 
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onItemClick gridview: " + itemList.get(position).getName());
                 }
                 if(position == 5){
-                    Intent intent = new Intent(getApplicationContext(), BrandActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), GuaranteeActivity.class);
                     startActivity(intent);
                     Log.d(TAG, "onItemClick gridview: " + itemList.get(position).getName());
                 }
