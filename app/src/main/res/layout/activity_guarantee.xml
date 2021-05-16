@@ -13,7 +13,9 @@ tools:context=".guarantee.GuaranteeActivity">
     android:layout_margin="5dp"
     android:gravity="center"
     android:text="@string/guarantees"
-    android:textSize="20dp" />
+    android:textSize="20dp"
+    android:textColor="#FFFF00"
+    android:background="#000"/>
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -25,13 +27,16 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:text="Chọn Loại Bảo Hành: "
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:textColor="#FFFF00"
+        android:background="#000"/>
 
     <ImageView
         android:id="@+id/imgV_xe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
+        android:background="#FFFF00"
         android:src="@drawable/iconxe_24"/>
 
     <ImageView
@@ -71,6 +76,8 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mã BH: "
+        android:textColor="#FFFF00"
+        android:background="#000"
         android:textSize="20dp" />
 
     <TextView
@@ -80,6 +87,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:paddingLeft="1dp"
         android:layout_marginRight="5dp"
         android:text=""
+        android:textColor="#7F8A0A"
         android:textSize="20dp" />
 
     <TextView
@@ -87,6 +95,8 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="N/Viên BH: "
+        android:textColor="#FFFF00"
+        android:background="#000"
         android:textSize="20dp" />
 
     <TextView
@@ -95,6 +105,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_height="wrap_content"
         android:paddingLeft="1dp"
         android:text=""
+        android:textColor="#7F8A0A"
         android:textSize="20dp" />
 </LinearLayout>
 
@@ -108,6 +119,8 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CMND: "
+        android:textColor="#FFFF00"
+        android:background="#000"
         android:textSize="20dp" />
 
     <TextView
@@ -117,6 +130,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:paddingLeft="1dp"
         android:layout_marginRight="5dp"
         android:text=""
+        android:textColor="#7F8A0A"
         android:textSize="20dp" />
 
     <TextView
@@ -124,6 +138,8 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tên KH: "
+        android:textColor="#FFFF00"
+        android:background="#000"
         android:textSize="20dp" />
 
     <TextView
@@ -132,6 +148,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_height="wrap_content"
         android:paddingLeft="1dp"
         android:text=""
+        android:textColor="#7F8A0A"
         android:textSize="20dp" />
 </LinearLayout>
 
@@ -140,7 +157,8 @@ tools:context=".guarantee.GuaranteeActivity">
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:orientation="horizontal"
-    android:paddingLeft="10dp">
+    android:paddingLeft="10dp"
+    android:background="#000">
 
     <TextView
         android:id="@+id/tv_ten_loai_bh"
@@ -149,6 +167,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_marginRight="5dp"
         android:text="@string/guarantees_name"
         android:textSize="15dp"
+        android:textColor="#FFFF00"
         android:textStyle="bold" />
 
     <TextView
@@ -157,6 +176,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_marginRight="5dp"
         android:text="@string/guarantees_content"
         android:textSize="15dp"
+        android:textColor="#FFFF00"
         android:textStyle="bold" />
 
     <TextView
@@ -165,6 +185,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_marginRight="5dp"
         android:text="@string/guarantees_date"
         android:textSize="15dp"
+        android:textColor="#FFFF00"
         android:textStyle="bold" />
 
     <TextView
@@ -173,6 +194,7 @@ tools:context=".guarantee.GuaranteeActivity">
         android:layout_marginRight="5dp"
         android:text="@string/guarantees_cost"
         android:textSize="15dp"
+        android:textColor="#FFFF00"
         android:textStyle="bold" />
     </LinearLayout>
     <FrameLayout
@@ -183,7 +205,8 @@ tools:context=".guarantee.GuaranteeActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingVertical="10dp"/>
+            android:paddingVertical="10dp"
+            android:textColor="#000"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddBH"
