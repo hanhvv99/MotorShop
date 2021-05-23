@@ -1,5 +1,7 @@
 package com.example.motorshop.datasrc;
 
+import java.io.Serializable;
+
 public class ChiTietSanPhamDonHang extends DonHang {
     private String tenSP;
     private int soLuong;
@@ -9,8 +11,9 @@ public class ChiTietSanPhamDonHang extends DonHang {
         super();
     }
 
-    public ChiTietSanPhamDonHang(String maDH, String ngayDat, String sdtKH, String tenNV, String tenSP, int soLuong, int donGiaBan) {
-        super(maDH, ngayDat, sdtKH, tenNV);
+    //sua sdtkh thanh cmnd cho hop voi don hang
+    public ChiTietSanPhamDonHang(String maDH, String ngayDat, String cmnd, String maNV, String tenSP, int soLuong, int donGiaBan) {
+        super(maDH, ngayDat, cmnd, maNV);
         this.tenSP = tenSP;
         this.soLuong = soLuong;
         this.donGiaBan = donGiaBan;

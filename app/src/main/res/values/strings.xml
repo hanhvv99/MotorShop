@@ -134,12 +134,28 @@
 
 
     //Guarantee
-    <string name="guarantees">Thông Tin Bảo Hành</string>
-    <string name="guarantees_xe">Bảo Hành Xe</string>
-    <string name="guarantees_phu_tung">Bảo Hành Phụ Tùng</string>
-    <string name="guarantees_name">Tên SP</string>
-    <string name="guarantees_content">Nội Dung BH</string>
-    <string name="guarantees_cost">Phí BH</string>
-    <string name="guarantees_date">Ngày BH</string>
-
+    <string name="guarantees">Bảo Hành</string>
+    <string name="TextViewTTDBH">Thông Tin Đơn Bảo Hành</string>
+    <string name="TextViewDSSPDH">Danh sách SP bảo hành đơn:</string>
+    <string name="TextViewBHX">Bảo Hành Xe</string>
+    <string name="TextViewBHPT">Bảo Hành Phụ Tùng</string>
+    <string name="TextViewSTT">STT</string>
+    <string name="TextViewMaDH">Mã Đơn Hàng</string>
+    <string name="TextViewNgayTao">Ngày Tạo</string>
+    <string name="TextViewPhieuBH">Phiếu Bảo Hành</string>
+    <string name="TextViewMaBH">Mã Bảo Hành</string>
+    <string name="TextViewTenSP">Tên Sản Phẩm</string>
+    <string name="TextViewMaNV">Mã N/Viên</string>
+    <string name="SpinnerSP">SpinnerTenSP</string>
+    <string name="ImageViewXe">ImageViewXe</string>
+    <string name="ImageViewPhuTung">ImageViewPhuTung</string>
+    <string name="TextViewCTBH">Chi Tiết Bảo Hành</string>
+    <string name="EditTextMaBH">Mã BH</string>
+    <string name="EditTextNDBH">Nội Dung BH</string>
+    <string name="EditTextPBH">Phí BH</string>
+    <string name="TextViewEditBH">EditCTBH</string>
+    <string name="TextViewDelBH">DelCTBH</string>
+    <string name="TextViewAddBH">Add</string>
+    <string name="EditTextSearchView">Nhập CMND để tìm đơn hàng bảo hành</string>
+    <string name="ImageButtonSave">Save</string>
 </resources>

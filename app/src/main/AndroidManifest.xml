@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MotorShop">
-        <activity android:name=".guarantee.GuaranteeActivity"></activity>
+        <activity android:name=".guarantee.GuaranteePhieuActivity"></activity>
+        <activity android:name=".guarantee.GuaranteeDonhangActivity" />
+        <activity android:name=".guarantee.GuaranteeChitietActivity" />
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
