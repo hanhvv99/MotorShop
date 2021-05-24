@@ -1,19 +1,18 @@
 package com.example.motorshop.activity.guarantee;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.motorshop.activity.R;
 import com.example.motorshop.datasrc.DanhSachSanPhamBaoHanh;
@@ -29,8 +28,9 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
     private ArrayList<DanhSachSanPhamBaoHanh> ds;
     private GuaranteeChitietAdapter guaranteeChitietAdapter;
     private DanhSachNoiDungAdapter danhSachNoiDungAdapter;
-    private String tenSP, maDH, maBH, ngayTao, noiDung, maNV;
+    private String tenSP, maDH, maBH, ngayTao, noiDung, maNV, maSP;
     private int phiBH;
+
     DBManager db = new DBManager(this);
 
     @Override
@@ -45,7 +45,7 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
         addNoiDung();
 
         showAdapterNDBH();
-
+//        showAdapterCTBH();
     }
 
     private void setControl() {
@@ -87,11 +87,19 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
                             Log.d("NOI DUNG", noiDung);
                             Log.d("PHI BH", String.valueOf(phiBH));
 
-                            //save dữ liệu vào BH
-                            db.createPhieuBH(maBH, maDH, ngayTao, maNV);
+                            if(db.setTonTaiMaBHtrongCTBH(maSP) == 1){
+                                Toast.makeText(getApplicationContext(), "Có mã BH này!"+maSP,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Đã tạo mã BH!"+maSP,
+                                        Toast.LENGTH_SHORT).show();
+                                //save dữ liệu vào BH
+                                db.createPhieuBH(maBH, maDH, ngayTao, maNV);
+                            }
 
                             //lấy mã để lưu dữ liệu
-                            String maSP = db.get1MaSP(tenSP);
+                            maSP = db.get1MaSP(tenSP);
+                            Log.d("MA SP", maSP);
 
                             //save dữ liệu CTBH
                             if(db.setTonTaiTblXe(maSP) == 1){
@@ -110,21 +118,9 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
 
-                            //sau khi luu xong
                             //reset
-                            EditTextMaBH.setOnKeyListener(new View.OnKeyListener() {
-                                @Override
-                                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                    if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                                            && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-//                                      block edittext
-                                    }
-                                    return false;
-                                }
-                            });
                             EditTextNDBH.setText("");
                             EditTextPBH.setText("");
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Vui lòng điền đầy đủ ô trống!",
                                     Toast.LENGTH_SHORT).show();
@@ -148,18 +144,20 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            maDH = bundle.getString("MADH", "");
+            maDH = bundle.getString("MADH");
             TextViewMaDH.setText(maDH);
 
-            maNV = bundle.getString("MANV", "");
+            maNV = bundle.getString("MANV");
             TextViewMaNV.setText(maNV);
 
-            tenSP = bundle.getString("TEN_SAN_PHAM", "");
+            tenSP = bundle.getString("TEN_SAN_PHAM");
             TextViewTenSP.setText(tenSP);
 
-            ngayTao = bundle.getString("NGAYTAO", "");
+            ngayTao = bundle.getString("NGAYTAO");
             TextViewNgayTao.setText(ngayTao);
 
+            maBH = bundle.getString("MABH");
+            EditTextMaBH.setText(maBH);
             //Dieu kien cho phi san pham
 
         }
@@ -175,11 +173,38 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
 
     public void showAdapterNDBH(){
         if(danhSachNoiDungAdapter == null){
-            danhSachNoiDungAdapter = new DanhSachNoiDungAdapter(this,R.layout.item_list_chitiet_baohanh,ds);
+            danhSachNoiDungAdapter = new DanhSachNoiDungAdapter(this, R.layout.item_list_chitiet_baohanh,ds);
             lvGuatantee_CT.setAdapter(danhSachNoiDungAdapter);
         } else{
             danhSachNoiDungAdapter.notifyDataSetChanged();
             lvGuatantee_CT.setSelection(danhSachNoiDungAdapter.getCount()-1);
         }
     }
+
+//    public void showAdapterCTBH(){
+//        if(danhSachNoiDungAdapter == null){
+//            //lấy mã để lưu dữ liệu
+//            maSP = db.get1MaSP(tenSP);
+//            Log.d("MA SP", maSP);
+//
+//            //save dữ liệu CTBH
+//            if(db.setTonTaiTblXe(maSP) == 1){
+//                ArrayList<DanhSachSanPhamBaoHanh> dsbhsp = db.loadAllNdBhXe(maBH, maSP);
+//                danhSachNoiDungAdapter = new DanhSachNoiDungAdapter(this,R.layout.item_list_phieu_baohanh, dsbhsp);
+//                lvGuatantee_CT.setAdapter(danhSachNoiDungAdapter);
+//                Toast.makeText(getApplicationContext(), "ND SP XE",
+//                        Toast.LENGTH_SHORT).show();
+//            } else {
+//                ArrayList<DanhSachSanPhamBaoHanh> dsbhsp = db.loadAllNdBhPT(maBH, maSP);
+//                danhSachNoiDungAdapter = new DanhSachNoiDungAdapter(this,R.layout.item_list_phieu_baohanh, dsbhsp);
+//                lvGuatantee_CT.setAdapter(danhSachNoiDungAdapter);
+//                Toast.makeText(getApplicationContext(), "ND SP PT",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        } else{
+//            danhSachNoiDungAdapter.notifyDataSetChanged();
+//            lvGuatantee_CT.setSelection(danhSachNoiDungAdapter.getCount()-1);
+//            lvGuatantee_CT.setVisibility(View.GONE);
+//        }
+//    }
 }

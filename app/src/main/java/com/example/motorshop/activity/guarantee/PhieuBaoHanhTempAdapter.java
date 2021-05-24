@@ -5,38 +5,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
+import android.widget.Toast;
 
 import com.example.motorshop.activity.R;
-import com.example.motorshop.datasrc.ChiTietBaoHanh;
-import com.example.motorshop.datasrc.DanhSachSanPhamBaoHanh;
 
 import java.util.ArrayList;
 
-public class GuaranteePhieuAdapter extends ArrayAdapter<ChiTietBaoHanh> {
-    ArrayList<ChiTietBaoHanh> chiTietBaoHanhs;
+
+public class PhieuBaoHanhTempAdapter extends ArrayAdapter<PhieuBaoHanhTemp> {
+    ArrayList<PhieuBaoHanhTemp> phieuBaoHanhTemps;
     Context context;
     int resource;
 
 
-    public GuaranteePhieuAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ChiTietBaoHanh> chiTietBaoHanhs) {
-        super(context, resource, chiTietBaoHanhs);
-        this.chiTietBaoHanhs = chiTietBaoHanhs;
+    public PhieuBaoHanhTempAdapter(Context context, int resource, ArrayList<PhieuBaoHanhTemp> phieuBaoHanhTemps) {
+        super(context, resource, phieuBaoHanhTemps);
+        this.phieuBaoHanhTemps = phieuBaoHanhTemps;
         this.context = context;
         this.resource = resource;
     }
 
     @Override
     public int getCount() {
-        return chiTietBaoHanhs.size();
+        return phieuBaoHanhTemps.size();
     }
 
 
     @Override
-    public ChiTietBaoHanh getItem(int position) {
-        return chiTietBaoHanhs.get(position);
+    public PhieuBaoHanhTemp getItem(int position) {
+        return phieuBaoHanhTemps.get(position);
     }
 
     @Override
@@ -46,6 +45,7 @@ public class GuaranteePhieuAdapter extends ArrayAdapter<ChiTietBaoHanh> {
 
     public class ViewHolder{
         TextView TextViewMaBH, TextViewTenSP, TextViewNgayTao;
+        ImageView TextViewDelBH;
     }
 
     @Override
@@ -57,20 +57,25 @@ public class GuaranteePhieuAdapter extends ArrayAdapter<ChiTietBaoHanh> {
             viewHolder.TextViewMaBH = convertView.findViewById(R.id.TextViewMaBH);
             viewHolder.TextViewTenSP = convertView.findViewById(R.id.TextViewTenSP);
             viewHolder.TextViewNgayTao = convertView.findViewById(R.id.TextViewNgayTao);
+            viewHolder.TextViewDelBH = convertView.findViewById(R.id.TextViewDelBH);
             convertView.setTag(viewHolder);
 
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        ChiTietBaoHanh chiTietBaoHanh = (ChiTietBaoHanh) getItem(position);
-        ArrayList<DanhSachSanPhamBaoHanh> danhSachSanPhamBaoHanhs = new ArrayList<>();
+        PhieuBaoHanhTemp phieuBaoHanhTemp = (PhieuBaoHanhTemp) getItem(position);
 
-        viewHolder.TextViewMaBH.setText(chiTietBaoHanh.getMaBH());
-        DanhSachSanPhamBaoHanh ds = new DanhSachSanPhamBaoHanh();
-        viewHolder.TextViewTenSP.setText(ds.getTenSP());
-        danhSachSanPhamBaoHanhs.add(ds);
-        chiTietBaoHanh.setDanhSachSPBH(danhSachSanPhamBaoHanhs);
-        viewHolder.TextViewNgayTao.setText(chiTietBaoHanh.getNgayBH());
+        viewHolder.TextViewMaBH.setText(phieuBaoHanhTemp.getMaBH());
+        viewHolder.TextViewTenSP.setText(phieuBaoHanhTemp.getTenSP());
+        viewHolder.TextViewNgayTao.setText(phieuBaoHanhTemp.getNgayBH());
+
+        viewHolder.TextViewDelBH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(parent.getContext(), "Delete", Toast.LENGTH_SHORT).show();
+            }
+        });
         return convertView;
     }
+
 }

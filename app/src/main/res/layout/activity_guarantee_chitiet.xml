@@ -37,7 +37,7 @@
             android:layout_margin="5dp"
             android:background="@drawable/background_shape"
             android:hint="@string/EditTextMaBH"
-            android:inputType="text"
+            android:inputType="none"
             app:textAllCaps="true"
             android:maxLines="1"
             android:padding="15dp"
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="Ngày tạo: "
+            android:text="Ngày: "
             android:textColor="#000"
             android:textSize="20dp" />
 

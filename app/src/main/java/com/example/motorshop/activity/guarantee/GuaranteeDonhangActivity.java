@@ -1,7 +1,5 @@
 package com.example.motorshop.activity.guarantee;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +12,8 @@ import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.motorshop.activity.R;
 import com.example.motorshop.datasrc.DonHang;
@@ -35,6 +35,8 @@ public class GuaranteeDonhangActivity extends AppCompatActivity {
 
         setControl();
         searchDHtheoCMND();
+
+//        db.deleteCTBHPT();
     }
 
     private void setControl() {
@@ -73,7 +75,7 @@ public class GuaranteeDonhangActivity extends AppCompatActivity {
                 Cursor cursor = (Cursor) listView.getItemAtPosition(position);
                 // Get the state's capital from this row in the database.
                 String maDH = cursor.getString(0);
-                Intent intent = new Intent(GuaranteeDonhangActivity.this,GuaranteePhieuActivity.class);
+                Intent intent = new Intent(GuaranteeDonhangActivity.this,GuaranteePhieuActivity.class);//transform
                 Bundle bundle = new Bundle();
                 bundle.putString("MADH", maDH);
                 intent.putExtras(bundle);

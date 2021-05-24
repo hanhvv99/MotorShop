@@ -1,21 +1,16 @@
 package com.example.motorshop.activity.guarantee;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.motorshop.activity.R;
 import com.example.motorshop.datasrc.DanhSachSanPhamBaoHanh;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class GuaranteeChitietAdapter extends BaseAdapter {
 
@@ -57,20 +52,20 @@ public class GuaranteeChitietAdapter extends BaseAdapter {
 
         //Đưa dữ liệu phần tử vào View
         DanhSachSanPhamBaoHanh ds = (DanhSachSanPhamBaoHanh) getItem(position);
-        ((TextView) viewHolder.findViewById(R.id.EditTextNDBH)).setText(String.format("%s", ds.getNoiDungBH()));
-        ((TextView) viewHolder.findViewById(R.id.EditTextPBH)).setText(String.format("%d", ds.getPhiBH()));
+        ((TextView) viewHolder.findViewById(R.id.EditTextNDBH)).setText(ds.getNoiDungBH());
+        ((TextView) viewHolder.findViewById(R.id.EditTextPBH)).setText(ds.getPhiBH());
 
         ((ImageView) viewHolder.findViewById(R.id.TextViewEditBH)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(parent.getContext(), "Edit", Toast.LENGTH_SHORT).show();
             }
         });
 
         ((ImageView) viewHolder.findViewById(R.id.TextViewDelBH)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(parent.getContext(), "Delete", Toast.LENGTH_SHORT).show();
             }
         });
 

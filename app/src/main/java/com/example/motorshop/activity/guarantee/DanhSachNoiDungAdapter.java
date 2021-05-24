@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,19 +44,16 @@ public class DanhSachNoiDungAdapter extends ArrayAdapter<DanhSachSanPhamBaoHanh>
 
     public class ViewHolder{
         TextView EditTextNDBH, EditTextPBH;
-        ImageView TextViewEditBH, TextViewDelBH;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        DanhSachNoiDungAdapter.ViewHolder viewHolder;
+        ViewHolder viewHolder;
         if(convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_list_chitiet_baohanh,parent,false);
-            viewHolder = new DanhSachNoiDungAdapter.ViewHolder();
+            viewHolder = new ViewHolder();
             viewHolder.EditTextNDBH = convertView.findViewById(R.id.EditTextNDBH);
             viewHolder.EditTextPBH = convertView.findViewById(R.id.EditTextPBH);
-            viewHolder.TextViewEditBH = convertView.findViewById(R.id.TextViewEditBH);
-            viewHolder.TextViewDelBH = convertView.findViewById(R.id.TextViewDelBH);
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
@@ -65,19 +61,6 @@ public class DanhSachNoiDungAdapter extends ArrayAdapter<DanhSachSanPhamBaoHanh>
         DanhSachSanPhamBaoHanh ds = (DanhSachSanPhamBaoHanh) getItem(position);
         viewHolder.EditTextNDBH.setText(ds.getNoiDungBH());
         viewHolder.EditTextPBH.setText(ds.getPhiBH());
-        viewHolder.TextViewEditBH.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        viewHolder.TextViewDelBH.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         return convertView;
     }
 }

@@ -1,13 +1,6 @@
 package com.example.motorshop.activity.guarantee;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,26 +12,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.motorshop.activity.R;
 import com.example.motorshop.datasrc.ChiTietBaoHanh;
-import com.example.motorshop.datasrc.DanhSachSanPhamBaoHanh;
 import com.example.motorshop.db.DBManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GuaranteePhieuActivity extends AppCompatActivity {
-    private FloatingActionButton btnActionAddP;
     private ListView lvGuatanteeP;
-    private TextView TextViewMaDH;
+    private TextView TextViewMaDH, loc;
     private ImageView imgV_xe, imgV_phutung;
     private Spinner spinnerTenSP;
     DBManager db = new DBManager(this);
-    private GuaranteePhieuAdapter guaranteeChitietAdapter;
-    private ArrayList<ChiTietBaoHanh> chiTietBaoHanhs;
-    private ArrayList<DanhSachSanPhamBaoHanh> danhSachSanPhamBaoHanhs;
+    private GuaranteePhieuAdapter guaranteePhieuAdapter;
+    private PhieuBaoHanhTempAdapter phieuBaoHanhTempAdapter;
+    ArrayList<ChiTietBaoHanh> chiTietBaoHanhs;
+    ArrayList<PhieuBaoHanhTemp> phieuBaoHanhTemps;
+    private String tenSP, maDH, maBH, ngayTao, maNV, maSP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,76 +41,66 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
 
         setControl();
 
-        btnActionAddChiTiet();
-
         getSPcuaDHlenSpinner();
-        
-        setEvent();
 
-        //SHOW CÁC PHIẾU BH
-        showAdapterPhieuBH();
-        db.loadAllPhieuBaoHanh();
+//        getSPcuaDHlenListview();
+
+        showAdapterPBH();
+
+        setEvent();
     }
 
     private void setControl() {
         lvGuatanteeP = findViewById(R.id.lvGuatantee_P);
         TextViewMaDH = findViewById(R.id.TextViewMaDH);
+        loc = findViewById(R.id.loc);
         imgV_xe = findViewById(R.id.ImageViewXe);
         imgV_phutung = findViewById(R.id.ImageViewPhuTung);
         spinnerTenSP = findViewById(R.id.SpinnerSP);
-        btnActionAddP = findViewById(R.id.btnAddBH_P);
         chiTietBaoHanhs = new ArrayList<ChiTietBaoHanh>();
-        danhSachSanPhamBaoHanhs = new ArrayList<DanhSachSanPhamBaoHanh>();
+        phieuBaoHanhTemps = new ArrayList<PhieuBaoHanhTemp>();
+        phieuBaoHanhTemps = db.loadAllPhieuBH(maDH);
     }
 
     private void setEvent() {
         imgV_xe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GuaranteePhieuActivity.this,"Lọc:xe",Toast.LENGTH_SHORT).show();
+                Toast.makeText(GuaranteePhieuActivity.this, "Lọc:xe", Toast.LENGTH_SHORT).show();
                 imgV_xe.setBackgroundColor(getResources().getColor(R.color.teal_200));
                 imgV_phutung.setBackgroundColor(getResources().getColor(R.color.white));
+
+                ArrayList<ChiTietBaoHanh> dsct = db.loadAllPhieuXe(maDH);
+                guaranteePhieuAdapter = new GuaranteePhieuAdapter(GuaranteePhieuActivity.this, R.layout.item_list_phieu_baohanh, dsct);
+                lvGuatanteeP.setAdapter(guaranteePhieuAdapter);
+                guaranteePhieuAdapter.notifyDataSetChanged();
             }
         });
         imgV_phutung.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GuaranteePhieuActivity.this,"Lọc:phụ tùng",Toast.LENGTH_SHORT).show();
+                Toast.makeText(GuaranteePhieuActivity.this, "Lọc:phụ tùng", Toast.LENGTH_SHORT).show();
                 imgV_phutung.setBackgroundColor(getResources().getColor(R.color.teal_200));
                 imgV_xe.setBackgroundColor(getResources().getColor(R.color.white));
+
+                ArrayList<ChiTietBaoHanh> dsct = db.loadAllPhieuPT(maDH);
+                guaranteePhieuAdapter = new GuaranteePhieuAdapter(GuaranteePhieuActivity.this, R.layout.item_list_phieu_baohanh, dsct);
+                lvGuatanteeP.setAdapter(guaranteePhieuAdapter);
+                guaranteePhieuAdapter.notifyDataSetChanged();
             }
         });
-    }
-
-    private void btnActionAddChiTiet() {
-        btnActionAddP.setOnClickListener(new View.OnClickListener() {
+        loc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(GuaranteePhieuActivity.this)
-                //set icon
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                //set title
-                .setTitle("Phiếu Bảo Hành")
-                //set message
-                .setMessage("Bạn có muốn thêm phiếu?")
-                //set positive button
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //set what would happen when positive button is clicked
-                        Intent intent = new Intent(getApplicationContext(), GuaranteeChitietActivity.class);
-                        startActivity(intent);
-                    }
-                })
-                //set negative button
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //set what should happen when negative button is clicked
-                        return;
-                    }
-                })
-                .show();
+                Toast.makeText(GuaranteePhieuActivity.this, "Lọc:all", Toast.LENGTH_SHORT).show();
+                imgV_xe.setBackgroundColor(getResources().getColor(R.color.white));
+                imgV_phutung.setBackgroundColor(getResources().getColor(R.color.white));
+
+                phieuBaoHanhTemps=db.loadAllPhieuBH(maDH);
+                phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(GuaranteePhieuActivity.this, R.layout.item_list_phieu_baohanh, phieuBaoHanhTemps);
+
+                lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
+                phieuBaoHanhTempAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -125,7 +109,7 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            String maDH = bundle.getString("MADH", "");
+            maDH = bundle.getString("MADH");
             TextViewMaDH.setText(maDH);
             List<String> labelSP = db.get1Label(maDH);
 
@@ -137,7 +121,7 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
 
             // attaching data adapter to spinner
             spinnerTenSP.setAdapter(dataAdapter);
-            Log.d("Cac SP cua "+maDH, String.valueOf(labelSP));
+            dataAdapter.notifyDataSetChanged();
 
             spinnerTenSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -150,14 +134,23 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
 
                     bundle.putString("MADH", maDH);
 
-                    String maNV = "NV001";
+                    maNV = "NV001";
                     bundle.putString("MANV", maNV);
 
-                    String tenSP = String.valueOf(item);
+                    tenSP = String.valueOf(item);
                     bundle.putString("TEN_SAN_PHAM", tenSP);
 
-                    String ngayTao = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());//HH:mm:ss
+                    ngayTao = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());//HH:mm:ss
                     bundle.putString("NGAYTAO", ngayTao);
+
+                    maSP = db.get1MaSP(tenSP);
+                    if(db.setTonTaiMaBHtrongCTBH(maSP) == 1){
+                        maBH = db.get1MaBH(maSP);
+                        bundle.putString("MABH", maBH);
+                    } else {
+                        maBH = "";
+                        bundle.putString("MABH", maBH);
+                    }
 
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -174,15 +167,71 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         }
     }
 
+    public void getSPcuaDHlenListview(){
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            maDH = bundle.getString("MADH");
+            TextViewMaDH.setText(maDH);
 
-    public void showAdapterPhieuBH(){
-        if(guaranteeChitietAdapter == null){
-            guaranteeChitietAdapter = new GuaranteePhieuAdapter(this,R.layout.item_list_phieu_baohanh, chiTietBaoHanhs);
-            lvGuatanteeP.setAdapter(guaranteeChitietAdapter);
+            phieuBaoHanhTemps=db.loadAllPhieuBH(maDH);
+            phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(this, R.layout.item_list_phieu_baohanh,phieuBaoHanhTemps);
+            lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
+            phieuBaoHanhTempAdapter.notifyDataSetChanged();
+
+            lvGuatanteeP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //get values
+                    Object item = parent.getItemAtPosition(position);
+
+                    // Get the state's capital from this row in the database.
+                    Intent intent = new Intent(GuaranteePhieuActivity.this,GuaranteeChitietActivity.class);
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("MADH", maDH);
+
+                    maNV = "NV001";
+                    bundle.putString("MANV", maNV);
+
+                    tenSP = String.valueOf(item);
+                    bundle.putString("TEN_SAN_PHAM", tenSP);
+
+                    ngayTao = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());//HH:mm:ss
+                    bundle.putString("NGAYTAO", ngayTao);
+
+                    maSP = db.get1MaSP(tenSP);
+                    if(db.setTonTaiMaBHtrongCTBH(maSP) == 1){
+                        maBH = db.get1MaBH(maSP);
+                        bundle.putString("MABH", maBH);
+                    } else {
+                        maBH = "";
+                        bundle.putString("MABH", maBH);
+                    }
+
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
+                    Log.d("MADH", maDH);
+                    Log.d("MANV", maNV);
+                    Log.d("TEN_SAN_PHAM", tenSP);
+                    Log.d("NGAYTAO", ngayTao);
+                    Toast.makeText(GuaranteePhieuActivity.this,"San pham:"+item,Toast.LENGTH_SHORT).show();
+                }
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        }
+    }
+
+    public void showAdapterPBH(){
+        if(phieuBaoHanhTempAdapter == null){
+            phieuBaoHanhTemps=db.loadAllPhieuBH(maDH);
+            phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(this, R.layout.item_list_phieu_baohanh,phieuBaoHanhTemps);
+            lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
         } else{
-            guaranteeChitietAdapter.notifyDataSetChanged();
-            lvGuatanteeP.setSelection(guaranteeChitietAdapter.getCount()-1);
-            lvGuatanteeP.setVisibility(View.GONE);
+            phieuBaoHanhTempAdapter.notifyDataSetChanged();
+            lvGuatanteeP.setSelection(phieuBaoHanhTempAdapter.getCount()-1);
         }
     }
 }

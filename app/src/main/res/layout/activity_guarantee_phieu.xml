@@ -46,6 +46,7 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
@@ -101,8 +102,9 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/TextViewMaBH"
+        android:text="MABH"
         android:textColor="#FFFF00"
+        android:layout_marginLeft="10dp"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -118,33 +120,17 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="14dp"
         android:text="@string/TextViewNgayTao"
         android:textSize="20dp"
         android:textColor="#FFFF00"
         android:textStyle="bold" />
 
 </LinearLayout>
-<FrameLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
     <ListView
         android:id="@+id/lvGuatantee_P"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:textColor="#000"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddBH_P"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_add"
-        app:tint="@color/white" />
-</FrameLayout>
 </LinearLayout>
