@@ -141,7 +141,7 @@
     <string name="TextViewBHPT">Bảo Hành Phụ Tùng</string>
     <string name="TextViewSTT">STT</string>
     <string name="TextViewMaDH">Mã Đơn Hàng</string>
-    <string name="TextViewNgayTao">Ngày Tạo</string>
+    <string name="TextViewNgayTao">Ngày BH</string>
     <string name="TextViewPhieuBH">Phiếu Bảo Hành</string>
     <string name="TextViewMaBH">Mã Bảo Hành</string>
     <string name="TextViewTenSP">Tên Sản Phẩm</string>
@@ -151,11 +151,14 @@
     <string name="ImageViewPhuTung">ImageViewPhuTung</string>
     <string name="TextViewCTBH">Chi Tiết Bảo Hành</string>
     <string name="EditTextMaBH">Mã BH</string>
-    <string name="EditTextNDBH">Nội Dung BH</string>
-    <string name="EditTextPBH">Phí BH</string>
+    <string name="EditTextNDBH">Nhập Nội Dung BH</string>
+    <string name="EditTextPBH">Nhập Phí BH</string>
     <string name="TextViewEditBH">EditCTBH</string>
     <string name="TextViewDelBH">DelCTBH</string>
     <string name="TextViewAddBH">Add</string>
     <string name="EditTextSearchView">Nhập CMND để tìm đơn hàng bảo hành</string>
+    <string name="TextViewTongPBH">Tổng phí bảo hành</string>
+    <string name="TextViewTongPhieuBH">Tổng phiếu bảo hành</string>
     <string name="ImageButtonSave">Save</string>
+    <string name="ImageButtonEdit">Edit</string>
 </resources>

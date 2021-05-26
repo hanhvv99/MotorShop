@@ -1,65 +1,41 @@
 package com.example.motorshop.activity.guarantee;
 
-import com.example.motorshop.datasrc.BaoHanh;
-import com.example.motorshop.datasrc.DanhSachSanPhamBaoHanh;
-
-
-abstract class ChiTietBH extends BaoHanh {
-    protected static String maBH;
-    protected static String ngayBH;
-
-    public ChiTietBH() { }
-
-    public ChiTietBH(String maBH, String maDH, String ngayBH, String maNV) {
-        super(maBH, maDH, ngayBH, maNV);
-        this.maBH = maBH;
-        this.ngayBH = ngayBH;
-    }
-
-}
-
-abstract class DSSanPhamBH extends DanhSachSanPhamBaoHanh {
-    protected static String tenSP;
-
-    public DSSanPhamBH() { }
-
-    public DSSanPhamBH(String tenSP, String noiDungBH, int phiBH) {
-        super(tenSP, noiDungBH, phiBH);
-        this.tenSP = tenSP;
-    }
-}
-
 public class PhieuBaoHanhTemp {
-
+    String maBH,tenSP,ngayBH;
     public PhieuBaoHanhTemp() { }
 
     public PhieuBaoHanhTemp(String maBH, String tenSP, String ngayBH) {
-        ChiTietBH.maBH = maBH;
-        DSSanPhamBH.tenSP = tenSP;
-        ChiTietBH.ngayBH = ngayBH;
+        this.maBH = maBH;
+        this.tenSP = tenSP;
+        this.ngayBH = ngayBH;
     }
 
     public String getMaBH() {
-        return ChiTietBH.maBH;
+        return this.maBH;
     }
 
     public void setMaBH(String maBH) {
-        ChiTietBH.maBH = maBH;
+        this.maBH = maBH;
     }
 
     public String getTenSP() {
-        return DSSanPhamBH.tenSP;
+        return this.tenSP;
     }
 
     public void setTenSP(String tenSP) {
-        DSSanPhamBH.tenSP = tenSP;
+        this.tenSP = tenSP;
     }
 
     public String getNgayBH() {
-        return ChiTietBH.ngayBH;
+        return this.ngayBH;
     }
 
     public void setNgayBH(String ngayBH) {
-        ChiTietBH.ngayBH = ngayBH;
+        this.ngayBH = ngayBH;
+    }
+
+    @Override
+    public String toString() {
+        return (this.getMaBH()+","+this.getTenSP()+","+this.getNgayBH());
     }
 }

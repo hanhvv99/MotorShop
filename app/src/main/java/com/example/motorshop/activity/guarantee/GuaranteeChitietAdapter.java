@@ -1,5 +1,7 @@
 package com.example.motorshop.activity.guarantee;
 
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -7,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.example.motorshop.activity.R;
 import com.example.motorshop.datasrc.DanhSachSanPhamBaoHanh;
+import com.example.motorshop.db.DBManager;
 
 import java.util.ArrayList;
 
@@ -53,21 +58,7 @@ public class GuaranteeChitietAdapter extends BaseAdapter {
         //Đưa dữ liệu phần tử vào View
         DanhSachSanPhamBaoHanh ds = (DanhSachSanPhamBaoHanh) getItem(position);
         ((TextView) viewHolder.findViewById(R.id.EditTextNDBH)).setText(ds.getNoiDungBH());
-        ((TextView) viewHolder.findViewById(R.id.EditTextPBH)).setText(ds.getPhiBH());
-
-        ((ImageView) viewHolder.findViewById(R.id.TextViewEditBH)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(parent.getContext(), "Edit", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        ((ImageView) viewHolder.findViewById(R.id.TextViewDelBH)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(parent.getContext(), "Delete", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ((TextView) viewHolder.findViewById(R.id.EditTextPBH)).setText(String.valueOf(ds.getPhiBH()));
 
         return viewHolder;
     }

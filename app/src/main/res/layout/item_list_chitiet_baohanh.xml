@@ -13,47 +13,26 @@
 
         <TextView
             android:id="@+id/EditTextNDBH"
-            android:layout_width="150dp"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="@string/EditTextNDBH"
-            android:textSize="20dp" />
+            android:textSize="15dp"
+            android:textColor="#000"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/EditTextPBH"
-            android:layout_width="120dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="30dp"
             android:text="@string/EditTextPBH"
-            android:textSize="20dp" />
+            android:textSize="15dp"
+            android:textColor="#000"/>
 
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp">
-
-        <ImageView
-            android:id="@+id/TextViewEditBH"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:src="@drawable/click_change_edit"
-            android:textSize="15dp" />
-
-        <ImageView
-            android:id="@+id/TextViewDelBH"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:src="@drawable/click_change_del"
-            android:textSize="15dp"
-            android:gravity="center"/>
-    </RelativeLayout>
 </LinearLayout>

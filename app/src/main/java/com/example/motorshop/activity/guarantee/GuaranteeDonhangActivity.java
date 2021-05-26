@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -33,10 +34,11 @@ public class GuaranteeDonhangActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guarantee_donhang);
 
-        setControl();
-        searchDHtheoCMND();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        db.deleteCTBHPT();
+        setControl();
+
+        searchDHtheoCMND();
     }
 
     private void setControl() {
@@ -76,6 +78,7 @@ public class GuaranteeDonhangActivity extends AppCompatActivity {
                 // Get the state's capital from this row in the database.
                 String maDH = cursor.getString(0);
                 Intent intent = new Intent(GuaranteeDonhangActivity.this,GuaranteePhieuActivity.class);//transform
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Bundle bundle = new Bundle();
                 bundle.putString("MADH", maDH);
                 intent.putExtras(bundle);

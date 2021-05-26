@@ -6,17 +6,28 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
 tools:context=".guarantee.GuaranteePhieuActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/light_gray">
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:gravity="center"
-    android:text="@string/TextViewPhieuBH"
-    android:textSize="25dp"
-    android:textColor="#FFFF00"
-    android:background="#000"/>
-
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/TextViewPhieuBH"
+            android:textColor="#FF0000"
+            android:textSize="25dp" />
+        <TextView
+            android:id="@+id/TextViewTongPhieuBH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="123"
+            android:textSize="25dp"/>
+    </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -46,7 +57,6 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
@@ -65,8 +75,18 @@ tools:context=".guarantee.GuaranteePhieuActivity">
         android:id="@+id/ImageViewPhuTung"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:src="@drawable/iconphutung_24" />
+
+    <TextView
+        android:id="@+id/all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="All"
+        android:textSize="20dp"
+        android:textColor="#000"/>
+
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
@@ -97,13 +117,13 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:orientation="horizontal"
-    android:background="#000">
+    android:background="@color/light_gray">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MABH"
-        android:textColor="#FFFF00"
+        android:textColor="#FF0000"
         android:layout_marginLeft="10dp"
         android:textSize="20dp"
         android:textStyle="bold" />
@@ -113,7 +133,7 @@ tools:context=".guarantee.GuaranteePhieuActivity">
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:text="@string/TextViewTenSP"
-        android:textColor="#FFFF00"
+        android:textColor="#FF0000"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -123,7 +143,7 @@ tools:context=".guarantee.GuaranteePhieuActivity">
         android:layout_marginLeft="14dp"
         android:text="@string/TextViewNgayTao"
         android:textSize="20dp"
-        android:textColor="#FFFF00"
+        android:textColor="#FF0000"
         android:textStyle="bold" />
 
 </LinearLayout>

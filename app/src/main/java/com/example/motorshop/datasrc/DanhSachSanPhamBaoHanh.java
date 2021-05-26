@@ -36,4 +36,9 @@ public class DanhSachSanPhamBaoHanh {                   //Thon tin bao hanh cua 
     public void setPhiBH(int phiBH) {
         this.phiBH = phiBH;
     }
+
+    @Override
+    public String toString() {
+        return this.getTenSP()+","+this.getNoiDungBH()+","+this.getPhiBH();
+    }
 }

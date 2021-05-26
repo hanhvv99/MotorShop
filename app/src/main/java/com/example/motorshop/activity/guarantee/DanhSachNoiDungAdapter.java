@@ -60,7 +60,7 @@ public class DanhSachNoiDungAdapter extends ArrayAdapter<DanhSachSanPhamBaoHanh>
         }
         DanhSachSanPhamBaoHanh ds = (DanhSachSanPhamBaoHanh) getItem(position);
         viewHolder.EditTextNDBH.setText(ds.getNoiDungBH());
-        viewHolder.EditTextPBH.setText(ds.getPhiBH());
+        viewHolder.EditTextPBH.setText(String.valueOf(ds.getPhiBH()));
         return convertView;
     }
 }
