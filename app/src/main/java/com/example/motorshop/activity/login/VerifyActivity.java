@@ -69,6 +69,7 @@ public class VerifyActivity extends AppCompatActivity {
         if(validOTP() == true){
             startActivity(new Intent(this, MainActivity.class));
         }
+
     }
 
     public boolean validOTP(){

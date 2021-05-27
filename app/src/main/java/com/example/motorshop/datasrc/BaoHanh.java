@@ -1,10 +1,13 @@
 package com.example.motorshop.datasrc;
 
+import java.util.ArrayList;
+
 public class BaoHanh {
     private String maBH;
     private String maDH;
     private String ngayBH;
     private String maNV;
+    private ArrayList<DanhSachSanPhamBaoHanh> danhSachSPBH = new ArrayList<>();
 
     public BaoHanh() { }
 

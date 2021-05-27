@@ -20,7 +20,6 @@ import com.example.motorshop.activity.R;
 import com.example.motorshop.db.DBManager;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,13 +28,12 @@ import java.util.List;
 
 public class GuaranteePhieuActivity extends AppCompatActivity {
     private ListView lvGuatanteeP;
-    private TextView TextViewMaDH, all, TextViewTongPhieuBH;
+    private TextView TextViewMaDH, all;
     private ImageView imgV_xe, imgV_phutung;
     private Spinner spinnerTenSP;
     DBManager db = new DBManager(this);
     private PhieuBaoHanhTempAdapter phieuBaoHanhTempAdapter;
     ArrayList<PhieuBaoHanhTemp> phieuBaoHanhTemps;
-    String maDH ;//= getIntent().getExtras().getString("MADH");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +50,19 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
 
         setEvent();
 
-        capNhatTongPhieuBH();
+        loadAllAdapter();
     }
 
     private void setControl() {
         lvGuatanteeP = findViewById(R.id.lvGuatantee_P);
         TextViewMaDH = findViewById(R.id.TextViewMaDH);
-        TextViewTongPhieuBH = findViewById(R.id.TextViewTongPhieuBH);
         all = findViewById(R.id.all);
         imgV_xe = findViewById(R.id.ImageViewXe);
         imgV_phutung = findViewById(R.id.ImageViewPhuTung);
         spinnerTenSP = findViewById(R.id.SpinnerSP);
         phieuBaoHanhTemps = new ArrayList<PhieuBaoHanhTemp>();
+        String maDH = getIntent().getExtras().getString("MADH");
         phieuBaoHanhTemps = db.loadAllPhieuBH(maDH);
-
-
     }
 
     private void setEvent() {
@@ -77,10 +73,9 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
                 imgV_xe.setBackgroundColor(getResources().getColor(R.color.teal_200));
                 imgV_phutung.setBackgroundColor(getResources().getColor(R.color.white));
 
+                String maDH = getIntent().getExtras().getString("MADH");
                 phieuBaoHanhTemps = db.loadAllPhieuXe(maDH);
-                phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(GuaranteePhieuActivity.this, R.layout.item_list_phieu_baohanh, phieuBaoHanhTemps);
-                lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
-                phieuBaoHanhTempAdapter.notifyDataSetChanged();
+                loadAdapter(phieuBaoHanhTemps);
             }
         });
         imgV_phutung.setOnClickListener(new View.OnClickListener() {
@@ -90,10 +85,9 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
                 imgV_phutung.setBackgroundColor(getResources().getColor(R.color.teal_200));
                 imgV_xe.setBackgroundColor(getResources().getColor(R.color.white));
 
+                String maDH = getIntent().getExtras().getString("MADH");
                 phieuBaoHanhTemps = db.loadAllPhieuPT(maDH);
-                phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(GuaranteePhieuActivity.this, R.layout.item_list_phieu_baohanh, phieuBaoHanhTemps);
-                lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
-                phieuBaoHanhTempAdapter.notifyDataSetChanged();
+                loadAdapter(phieuBaoHanhTemps);
             }
         });
         all.setOnClickListener(new View.OnClickListener() {
@@ -103,10 +97,9 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
                 imgV_xe.setBackgroundColor(getResources().getColor(R.color.white));
                 imgV_phutung.setBackgroundColor(getResources().getColor(R.color.white));
 
+                String maDH = getIntent().getExtras().getString("MADH");
                 phieuBaoHanhTemps = db.loadAllPhieuBH(maDH);
-                phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(GuaranteePhieuActivity.this, R.layout.item_list_phieu_baohanh, phieuBaoHanhTemps);
-                lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
-                phieuBaoHanhTempAdapter.notifyDataSetChanged();
+                loadAdapter(phieuBaoHanhTemps);
             }
         });
     }
@@ -115,39 +108,46 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            maDH = bundle.getString("MADH");
+            String maDH = bundle.getString("MADH");
             TextViewMaDH.setText(maDH);
-            List<String> labelSP = db.get1Label(maDH);
 
-            // Creating adapter for spinner
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labelSP);
+            String[] sanPhamDonHang= db.get1LabelNames(maDH);
 
-            // Drop down layout style - list view with radio button
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Integer flags[] = db.get1LabelImage(maDH);
 
-            // attaching data adapter to spinner
-            spinnerTenSP.setAdapter(dataAdapter);
-            dataAdapter.notifyDataSetChanged();
+            SpinnerCustomAdapter spinnerCustomAdapter = new SpinnerCustomAdapter(getApplicationContext(),flags, sanPhamDonHang);
+            spinnerTenSP.setAdapter(spinnerCustomAdapter);
 
             spinnerTenSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    //get values
-                    Object item = parent.getItemAtPosition(position);
+                    String item = sanPhamDonHang[position];
 
                     String maNV = "NV001";
 
                     String tenSP = String.valueOf(item);
 
-                    String ngayBH = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());//HH:mm:ss
+                    String ngayBH = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date());
 
                     String maSP = db.get1MaSP(tenSP);
-                    String maBH = "";
+
+                    String ID = db.getID();
+                    String[] tachID = ID.split("BH");
+                    String sauKhiTach = tachID[1];
+                    int convertID = Integer.parseInt(sauKhiTach);
+                    String maBH = "BH0"+(convertID+1);Log.d("MA BH",maBH);
+
                     String phiBH = dkPhiBH(ngayBH,maSP);
 
                     startChiTiet(item,maDH,maNV,tenSP,ngayBH,maBH,phiBH);
+
+                    Log.d("Spinner",item);
+                    Toast.makeText(getApplicationContext(), item, Toast.LENGTH_LONG).show();
                 }
 
+                @Override
                 public void onNothingSelected(AdapterView<?> parent) {
+
                 }
             });
         }
@@ -157,13 +157,11 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            maDH = bundle.getString("MADH");
+            String maDH = bundle.getString("MADH");
             TextViewMaDH.setText(maDH);
 
             phieuBaoHanhTemps = db.loadAllPhieuBH(maDH);
-            phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(this, R.layout.item_list_phieu_baohanh, phieuBaoHanhTemps);
-            lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
-            phieuBaoHanhTempAdapter.notifyDataSetChanged();
+            loadAdapter(phieuBaoHanhTemps);
 
             lvGuatanteeP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -221,13 +219,15 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
     public String dkPhiBH(String ngayBH, String maSP) {
         String phi = null;
 
-        DateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         Date currentDate = new Date();
         Date date1 = null;
         Date date2 = null;
 
         try {
+            String maDH = getIntent().getExtras().getString("MADH");
+
             // calculating the difference b/w startDate and endDate
             String ngayDH = db.get1NgayDH(maDH);
             ngayBH = simpleDateFormat.format(currentDate);
@@ -241,7 +241,7 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
             long getMonthsDiff = getDiff / (12 * 24 * 60 * 60 * 1000);//1thang*1ngay*1tieng*1phut*1giay
             Log.d("hết hạn", String.valueOf(getMonthsDiff));
 
-            long han = Long.parseLong(db.get1HanBH(maDH, maSP));
+            long han = db.get1HanBH(maDH, maSP);
             Log.d("hạn bảo hành", String.valueOf(han));
 
             if (getMonthsDiff <= han) {//lấy hạn bảo hành
@@ -285,48 +285,54 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         Toast.makeText(GuaranteePhieuActivity.this, "San pham:" + item, Toast.LENGTH_SHORT).show();
     }
 
-    public void loadAdapter(){
-        maDH = getIntent().getExtras().getString("MADH");
+    public void loadAllAdapter(){
+        String maDH = getIntent().getExtras().getString("MADH");
         TextViewMaDH.setText(maDH);
 
         phieuBaoHanhTemps = db.loadAllPhieuBH(maDH);
-        phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(this, R.layout.item_list_phieu_baohanh, phieuBaoHanhTemps);
+
+        loadAdapter(phieuBaoHanhTemps);
+    }
+
+    public void loadAdapter(ArrayList<PhieuBaoHanhTemp> ds){
+        phieuBaoHanhTempAdapter = new PhieuBaoHanhTempAdapter(this, R.layout.item_list_phieu_baohanh, ds);
         lvGuatanteeP.setAdapter(phieuBaoHanhTempAdapter);
         phieuBaoHanhTempAdapter.notifyDataSetChanged();
-
     }
 
     public void delPhieu(int pos, String maBH, String maSP){
         new AlertDialog.Builder(this)
-                .setTitle("Xóa Phiếu")
-                .setMessage("Bạn có muốn xóa phiếu này không?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(db.setTonTaiTblXe(maSP) == 1) {
-                            db.deleteAllNoiDungBHX(pos,phieuBaoHanhTemps);
-                            db.deletePhieuBH(pos,phieuBaoHanhTemps);
-                            phieuBaoHanhTemps.remove(pos);
-                            phieuBaoHanhTempAdapter.notifyDataSetChanged();
-                            Toast.makeText(getApplicationContext(), "Xóa Phiếu BH "+maSP+" thành công!",
-                                        Toast.LENGTH_SHORT).show();
-                        } else {
-                            db.deleteAllNoiDungBHPT(pos,phieuBaoHanhTemps);
-                            db.deletePhieuBH(pos,phieuBaoHanhTemps);
-                            phieuBaoHanhTemps.remove(pos);
-                            phieuBaoHanhTempAdapter.notifyDataSetChanged();
-                            Toast.makeText(getApplicationContext(), "Xóa Phiếu BH "+maSP+" thành công!",
+            .setTitle("Xóa Phiếu")
+            .setMessage("Bạn có muốn xóa phiếu này không?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(db.setTonTaiTblXe(maSP) == 1) {
+                        db.deleteAllNoiDungBHX(pos,phieuBaoHanhTemps);
+                        db.deletePhieuBH(pos,phieuBaoHanhTemps);
+                        phieuBaoHanhTemps.remove(pos);
+                        phieuBaoHanhTempAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Xóa Phiếu BH "+maSP+" thành công!",
                                     Toast.LENGTH_SHORT).show();
-                        }
+                    } else {
+                        db.deleteAllNoiDungBHPT(pos,phieuBaoHanhTemps);
+                        db.deletePhieuBH(pos,phieuBaoHanhTemps);
+                        phieuBaoHanhTemps.remove(pos);
+                        phieuBaoHanhTempAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Xóa Phiếu BH "+maSP+" thành công!",
+                                Toast.LENGTH_SHORT).show();
                     }
-                })
-                .setNegativeButton("Cancel",null)
-                .show();
+                }
+            })
+            .setNegativeButton("Cancel",null)
+            .show();
 
     }
 
-    public void capNhatTongPhieuBH(){
-        String tongPhi = String.valueOf(db.getTongPhieu());
-        TextViewTongPhieuBH.setText(tongPhi);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("resume","Phieu bao hanh");
+        loadAllAdapter();
     }
 }

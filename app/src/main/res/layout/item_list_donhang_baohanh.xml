@@ -23,15 +23,11 @@
             android:text="@string/TextViewMaDH"
             android:textSize="20dp"/>
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"/>
-
         <TextView
             android:id="@+id/TextViewNgayTao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="90dp"
             android:text="@string/TextViewNgayTao"
             android:textSize="20dp"/>
 

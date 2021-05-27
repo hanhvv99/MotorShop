@@ -13,20 +13,12 @@ tools:context=".guarantee.GuaranteePhieuActivity">
         android:background="@color/light_gray">
 
         <TextView
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/TextViewPhieuBH"
             android:textColor="#FF0000"
             android:textSize="25dp" />
-        <TextView
-            android:id="@+id/TextViewTongPhieuBH"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:gravity="center"
-            android:text="123"
-            android:textSize="25dp"/>
     </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
@@ -104,7 +96,7 @@ tools:context=".guarantee.GuaranteePhieuActivity">
 
     <Spinner
         android:id="@+id/SpinnerSP"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:spinnerMode="dropdown"
@@ -131,7 +123,7 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:text="@string/TextViewTenSP"
         android:textColor="#FF0000"
         android:textSize="20dp"
@@ -140,7 +132,7 @@ tools:context=".guarantee.GuaranteePhieuActivity">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
+        android:layout_marginLeft="55dp"
         android:text="@string/TextViewNgayTao"
         android:textSize="20dp"
         android:textColor="#FF0000"

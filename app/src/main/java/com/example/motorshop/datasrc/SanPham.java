@@ -9,18 +9,18 @@ public class SanPham {
     private int donGia;
     private int hanBH;
     private int hinhAnh;
-    private String tenNCC;
+    private String maNCC;
 
     public SanPham() { }
 
-    public SanPham(String maSP, String tenSP, int soLuong, int donGia, int hanBH, int hinhAnh, String tenNCC) {
+    public SanPham(String maSP, String tenSP, int soLuong, int donGia, int hanBH, int hinhAnh, String maNCC) {
         this.maSP = maSP;
         this.tenSP = tenSP;
         this.soLuong = soLuong;
         this.donGia = donGia;
         this.hanBH = hanBH;
         this.hinhAnh = hinhAnh;
-        this.tenNCC = tenNCC;
+        this.maNCC = maNCC;
     }
 
     public String getMaSP() {
@@ -71,11 +71,11 @@ public class SanPham {
         this.hinhAnh = hinhAnh;
     }
 
-    public String getTenNCC() {
-        return tenNCC;
+    public String getMaNCC() {
+        return maNCC;
     }
 
-    public void setTenNCC(String tenNCC) {
-        this.tenNCC = tenNCC;
+    public void setMaNCC(String maNCC) {
+        this.maNCC = maNCC;
     }
 }

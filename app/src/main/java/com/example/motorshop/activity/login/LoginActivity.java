@@ -1,6 +1,7 @@
 package com.example.motorshop.activity.login;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,8 +25,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         getSupportActionBar().hide();
+
+
         setControl();
         setEvent();
     }
@@ -38,6 +40,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
+//        System.out.println("HD: " + R.drawable.honda);
+//        System.out.println("HD: " + R.drawable.hd_wavea);
+//        System.out.println("HD: " + R.drawable.hd_winx);
+//        System.out.println("HD: " + R.drawable.hd_vision);
+//        System.out.println("YM: " + R.drawable.yamaha);
+//        System.out.println("YM: " + R.drawable.ym_sirius);
+//        System.out.println("YM: " + R.drawable.ym_exciter);
+//        System.out.println("YM: " + R.drawable.ym_grande);
+//        System.out.println("SYM: " + R.drawable.sym);
+//        System.out.println("OHL: " + R.drawable.ohlins);
+//        System.out.println("OHL: " + R.drawable.oh_sticker1);
+//        System.out.println("OHL: " + R.drawable.oh_phuoc_vario);
+//        System.out.println("AKP: " + R.drawable.akrapovic);
+//        System.out.println("AKP: " + R.drawable.ak_sticker1);
+//        System.out.println("AKP: " + R.drawable.ak_gp_titan_r3);
+
+//        DBManager db = new DBManager(LoginActivity.this);
+//        db.getWritableDatabase();
+//        db.initData();
 
         btnLogin.setOnClickListener(v -> login());
 

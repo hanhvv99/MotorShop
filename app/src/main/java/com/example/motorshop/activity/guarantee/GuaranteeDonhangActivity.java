@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -83,6 +82,7 @@ public class GuaranteeDonhangActivity extends AppCompatActivity {
                 bundle.putString("MADH", maDH);
                 intent.putExtras(bundle);
                 startActivity(intent);
+
                 Toast.makeText(GuaranteeDonhangActivity.this,"Don Hang: "+maDH,Toast.LENGTH_SHORT).show();
             }
         });
@@ -105,4 +105,9 @@ public class GuaranteeDonhangActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }

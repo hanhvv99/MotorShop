@@ -1,6 +1,5 @@
 package com.example.motorshop.datasrc;
 
-//sua ten nv thanh manv cho dung voi database
 public class DonHang {
     private String maDH;
     private String ngayDat;
