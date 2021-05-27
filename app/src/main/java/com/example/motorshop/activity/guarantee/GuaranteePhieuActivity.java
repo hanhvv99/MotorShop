@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,17 +23,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class GuaranteePhieuActivity extends AppCompatActivity {
     private ListView lvGuatanteeP;
     private TextView TextViewMaDH, all;
     private ImageView imgV_xe, imgV_phutung;
-    private Spinner spinnerTenSP;
+    private GridView gridViewSP;
     DBManager db = new DBManager(this);
     private PhieuBaoHanhTempAdapter phieuBaoHanhTempAdapter;
     ArrayList<PhieuBaoHanhTemp> phieuBaoHanhTemps;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +41,9 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
 
         setControl();
 
-        getSPcuaDHlenSpinner();
-
         getSPcuaDHlenListview();
+
+        getSPcuaDHlenGridview();
 
         setEvent();
 
@@ -59,7 +56,7 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         all = findViewById(R.id.all);
         imgV_xe = findViewById(R.id.ImageViewXe);
         imgV_phutung = findViewById(R.id.ImageViewPhuTung);
-        spinnerTenSP = findViewById(R.id.SpinnerSP);
+        gridViewSP = findViewById(R.id.gridview);
         phieuBaoHanhTemps = new ArrayList<PhieuBaoHanhTemp>();
         String maDH = getIntent().getExtras().getString("MADH");
         phieuBaoHanhTemps = db.loadAllPhieuBH(maDH);
@@ -102,55 +99,6 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
                 loadAdapter(phieuBaoHanhTemps);
             }
         });
-    }
-
-    public void getSPcuaDHlenSpinner() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            String maDH = bundle.getString("MADH");
-            TextViewMaDH.setText(maDH);
-
-            String[] sanPhamDonHang= db.get1LabelNames(maDH);
-
-            Integer flags[] = db.get1LabelImage(maDH);
-
-            SpinnerCustomAdapter spinnerCustomAdapter = new SpinnerCustomAdapter(getApplicationContext(),flags, sanPhamDonHang);
-            spinnerTenSP.setAdapter(spinnerCustomAdapter);
-
-            spinnerTenSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String item = sanPhamDonHang[position];
-
-                    String maNV = "NV001";
-
-                    String tenSP = String.valueOf(item);
-
-                    String ngayBH = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date());
-
-                    String maSP = db.get1MaSP(tenSP);
-
-                    String ID = db.getID();
-                    String[] tachID = ID.split("BH");
-                    String sauKhiTach = tachID[1];
-                    int convertID = Integer.parseInt(sauKhiTach);
-                    String maBH = "BH0"+(convertID+1);Log.d("MA BH",maBH);
-
-                    String phiBH = dkPhiBH(ngayBH,maSP);
-
-                    startChiTiet(item,maDH,maNV,tenSP,ngayBH,maBH,phiBH);
-
-                    Log.d("Spinner",item);
-                    Toast.makeText(getApplicationContext(), item, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        }
     }
 
     public void getSPcuaDHlenListview() {
@@ -334,5 +282,62 @@ public class GuaranteePhieuActivity extends AppCompatActivity {
         super.onResume();
         Log.d("resume","Phieu bao hanh");
         loadAllAdapter();
+    }
+
+    public void getSPcuaDHlenGridview() {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            String maDH = bundle.getString("MADH");
+            TextViewMaDH.setText(maDH);
+
+            String[] sanPhamDonHang= db.get1LabelNames(maDH);
+
+            Integer flags[] = db.get1LabelImage(maDH);
+
+            GridviewApdapter gridviewApdapter = new GridviewApdapter(getApplicationContext(),flags, sanPhamDonHang);
+            gridViewSP.setAdapter(gridviewApdapter);
+
+            gridViewSP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    String item = sanPhamDonHang[position];
+
+                    new AlertDialog.Builder(GuaranteePhieuActivity.this)
+                        .setTitle("Thêm Phiếu")
+                        .setMessage("Bạn có muốn thêm phiếu cho sản phẩm ["+item.toUpperCase()+"] này?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String maNV = "NV001";
+
+                                String tenSP = item;
+
+                                String ngayBH = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                                                        .format(new java.util.Date());
+
+                                String maSP = db.get1MaSP(tenSP);
+
+                                String ID = db.getID();
+                                String[] tachID = ID.split("BH");
+                                String sauKhiTach = tachID[1];
+                                int convertID = Integer.parseInt(sauKhiTach);
+                                String maBH = "BH0"+(convertID+1);Log.d("MA BH",maBH);
+
+                                String phiBH = dkPhiBH(ngayBH,maSP);
+
+                                startChiTiet(item,maDH,maNV,tenSP,ngayBH,maBH,phiBH);
+
+                                Log.d("san pham",item);
+                                Toast.makeText(getApplicationContext(), item, Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel",null)
+                        .show();
+                }
+            });
+        }
     }
 }

@@ -173,11 +173,9 @@ public class GuaranteeChitietActivity extends AppCompatActivity {
         if(db.setTonTaiTblXe(maSP) == 1) {
             db.createChiTietBHXE(maBH,maSP,noiDung,phiBH);
             ds = db.loadAllNdBhXe(maBH, maSP);
-            ds.clear();
         } else {
             db.createChiTietBHPT(maBH,maSP,noiDung,phiBH);
             ds = db.loadAllNdBhPT(maBH, maSP);
-            ds.clear();
         }
         loadAdapter(ds);
         capNhatTongPhiBH(maBH,maSP);

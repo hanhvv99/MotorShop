@@ -162,6 +162,6 @@
     <string name="TextViewTongPhieuBH">Tổng phiếu bảo hành</string>
     <string name="ImageButtonSave">Save</string>
     <string name="ImageButtonEdit">Edit</string>
-
+    <string name="FloatingActionButtonAddPBH">FloatingActionButton</string>
 
 </resources>

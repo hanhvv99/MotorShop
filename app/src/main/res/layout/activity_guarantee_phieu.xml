@@ -23,7 +23,6 @@ tools:context=".guarantee.GuaranteePhieuActivity">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
     android:orientation="horizontal">
 
     <TextView
@@ -45,7 +44,6 @@ tools:context=".guarantee.GuaranteePhieuActivity">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
     android:orientation="horizontal">
 
     <TextView
@@ -83,7 +81,6 @@ tools:context=".guarantee.GuaranteePhieuActivity">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
     android:orientation="horizontal">
 
     <TextView
@@ -92,22 +89,20 @@ tools:context=".guarantee.GuaranteePhieuActivity">
         android:layout_marginRight="20dp"
         android:text="Các SP của đơn: "
         android:textSize="20dp"
+        android:layout_gravity="center"
         android:textColor="#000"/>
 
-    <Spinner
-        android:id="@+id/SpinnerSP"
+    <GridView
+        android:id="@+id/gridview"
+        android:numColumns="1"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:spinnerMode="dropdown"
-        android:textColor="#000"
-        android:textSize="20dp" />
+        android:layout_height="50dp"/>
+
 </LinearLayout>
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
     android:orientation="horizontal"
     android:background="@color/light_gray">
 
@@ -139,10 +134,11 @@ tools:context=".guarantee.GuaranteePhieuActivity">
         android:textStyle="bold" />
 
 </LinearLayout>
-    <ListView
-        android:id="@+id/lvGuatantee_P"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="#000"/>
+
+        <ListView
+            android:id="@+id/lvGuatantee_P"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"/>
+
 </LinearLayout>
