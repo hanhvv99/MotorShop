@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.motorshop.activity.guarantee.PhieuBaoHanhTemp;
+import com.example.motorshop.activity.statistic.ThongKeTemp;
 import com.example.motorshop.datasrc.BaoHanh;
 import com.example.motorshop.datasrc.BoPhan;
 import com.example.motorshop.datasrc.ChiTietDonHang;
@@ -24,8 +25,14 @@ import com.example.motorshop.datasrc.ThongSoPhuTung;
 import com.example.motorshop.datasrc.ThongSoXe;
 import com.example.motorshop.datasrc.Xe;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DBManager extends SQLiteOpenHelper {
 
@@ -968,8 +975,6 @@ public class DBManager extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 intList.add(cursor.getInt(0));
-
-
                 flags = intList.toArray(new Integer[intList.size()]);
             } while (cursor.moveToNext());
         }
@@ -1132,5 +1137,110 @@ public class DBManager extends SQLiteOpenHelper {
         cursor.close();
         return tong;
     }
+
+    //THỐNG KÊ XE
+    public int getAllSLxe(){
+        String selectQuery = "SELECT SUM(C.SOLUONG) FROM chitietdondatxe C, DONDATHANG D WHERE C.MADH = D.MADH ";
+
+        int tong = cursorSQLint(selectQuery);
+        return tong;
+    }
+
+    public int getAllSLpt(){
+        String selectQuery = "SELECT SUM(P.SOLUONG) FROM chitietdondatphutung P, DONDATHANG D WHERE P.MADH = D.MADH ";
+
+        int tong = cursorSQLint(selectQuery);
+        return tong;
+    }
+
+    public int getAllDTxe(){
+        String selectQuery = "SELECT SUM(C.DONGIABAN) FROM chitietdondatxe C, DONDATHANG D WHERE C.MADH = D.MADH ";
+
+        int tong = cursorSQLint(selectQuery);
+        return tong;
+    }
+
+    public int getAllDTpt(){
+        String selectQuery = "SELECT SUM(P.DONGIABAN) FROM chitietdondatphutung P, DONDATHANG D WHERE P.MADH = D.MADH ";
+
+        int tong = cursorSQLint(selectQuery);
+        return tong;
+    }
+
+    public ArrayList<ThongKeTemp> loadXeTheoTG() {
+        String selectQuery = "SELECT X.TENXE,SUM(C.SOLUONG) AS SOLUONG, (C.DONGIABAN), D.NGAYDAT FROM chitietdondatxe C, DONDATHANG D, XE X " +
+                "WHERE X.MAXE = C.MAXE AND C.MADH = D.MADH "+
+                "group BY X.MAXE ORDER BY C.SOLUONG DESC";
+
+        ArrayList<ThongKeTemp> list = cursorSQLArrTK(selectQuery);
+        return list;
+    }
+
+    public ArrayList<ThongKeTemp> loadPTtheoTG() {
+        String selectQuery = "SELECT PT.TENPT, SUM(P.SOLUONG) AS SOLUONG, (P.DONGIABAN) AS DONGIA, D.NGAYDAT " +
+                "FROM CHITIETDONDATPHUTUNG P, DONDATHANG D, PHUTUNG PT "+
+                "WHERE PT.MAPT = P.MAPT AND P.MADH = D.MADH "+
+                "GROUP BY PT.TENPT ORDER BY P.SOLUONG DESC";
+
+        ArrayList<ThongKeTemp> list = cursorSQLArrTK(selectQuery);
+        return list;
+    }
+
+    public ArrayList<ThongKeTemp> loadXeTheoTGLimit(String i) {
+        String selectQuery = "SELECT X.TENXE,SUM(C.SOLUONG) AS SOLUONG, (C.DONGIABAN), D.NGAYDAT FROM chitietdondatxe C, DONDATHANG D, XE X " +
+                "WHERE X.MAXE = C.MAXE AND C.MADH = D.MADH "+
+                "group BY X.MAXE ORDER BY C.SOLUONG DESC LIMIT "+i;
+
+        ArrayList<ThongKeTemp> list = cursorSQLArrTK(selectQuery);
+        return list;
+    }
+
+    public ArrayList<ThongKeTemp> loadPTtheoTGLimit(String i) {
+        String selectQuery = "SELECT PT.TENPT, SUM(P.SOLUONG) AS SOLUONG, (P.DONGIABAN) AS DONGIA, D.NGAYDAT " +
+                "FROM CHITIETDONDATPHUTUNG P, DONDATHANG D, PHUTUNG PT "+
+                "WHERE PT.MAPT = P.MAPT AND P.MADH = D.MADH "+
+                "GROUP BY PT.TENPT ORDER BY P.SOLUONG DESC LIMIT "+i;
+
+        ArrayList<ThongKeTemp> list = cursorSQLArrTK(selectQuery);
+        return list;
+    }
+
+    public int cursorSQLint(String selectQuery){
+        int tong = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                tong = cursor.getInt(0);
+            } while (cursor.moveToNext());
+        }
+        Log.d("SQL",selectQuery);
+        Log.d("int tong", String.valueOf(tong));
+        db.close();
+        cursor.close();
+
+        return tong;
+    }
+
+    public ArrayList<ThongKeTemp> cursorSQLArrTK(String selectQuery){
+        ArrayList<ThongKeTemp> listTK = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                ThongKeTemp tk = new ThongKeTemp();
+                tk.setTenSP(cursor.getString(0));
+                tk.setSoLuong(cursor.getInt(1));
+                tk.setGiaBan(cursor.getInt(2));
+                tk.setNgayDat(cursor.getString(3));
+                listTK.add(tk);
+            } while (cursor.moveToNext());
+        }
+        Log.d("SQL",selectQuery);
+        db.close();
+        cursor.close();
+        return listTK;
+    }
+
 
 }
