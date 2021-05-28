@@ -1,10 +1,14 @@
 package com.example.motorshop.activity.statistic;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.assist.AssistStructure;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,10 +18,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +53,7 @@ public class ThongKeActivity extends AppCompatActivity {
     private ArrayList<ThongKeTemp> data;
     ThongKeTempAdapter thongKeTempAdapter;
 
-    String tgTu, tgDen; int i;
+    String tgTu, tgDen; int i; String strInput;
     DBManager db = new DBManager(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,7 @@ public class ThongKeActivity extends AppCompatActivity {
         ArrayList<ThongKeTemp> list = db.loadXeTheoTG();
         ArrayList<ThongKeTemp> listTemp = new ArrayList<>();
         int sumSL = 0, sumDT = 0;
+        String valuesSpinner = spinnerChonSL();
 
         for(ThongKeTemp tk : list){
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(tk.getNgayDat());
@@ -77,15 +84,19 @@ public class ThongKeActivity extends AppCompatActivity {
             Date dDen = new SimpleDateFormat("dd/MM/yyyy").parse(tgDen);
 
             if(tk.getNgayDat() != null && dTu.getTime() <= date.getTime() && date.getTime() <= dDen.getTime()){
-
-                listTemp.add(tk);
-                sumSL = sumSL + tk.getSoLuong();
-                sumDT = sumDT + tk.getGiaBan();
-                load(listTemp);
-                TextViewTongSLbanduoc.setText(String.valueOf(sumSL));
-                formatGiaTien(sumDT);
-                Log.d("TAG",listTemp.toString());
-                Log.d("SL sau loc", String.valueOf(sumSL));
+                if(valuesSpinner.equals("...")){
+                    listTemp.add(tk);
+                    sumSL = sumSL + tk.getSoLuong();
+                    sumDT = sumDT + tk.getGiaBan();
+                    load(listTemp);
+                    TextViewTongSLbanduoc.setText(String.valueOf(sumSL));
+                    formatGiaTien(sumDT);
+                    Log.d("TAG",listTemp.toString());
+                    Log.d("SL sau loc", String.valueOf(sumSL));
+                } else{
+                    Log.d("spinner",valuesSpinner);
+                    Toast.makeText(ThongKeActivity.this, "get values spinner: "+valuesSpinner, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -93,16 +104,28 @@ public class ThongKeActivity extends AppCompatActivity {
     public void loadXeDKLimit(String tgTu, String tgDen, String i) throws Exception {
         ArrayList<ThongKeTemp> list = db.loadXeTheoTGLimit(i);
         ArrayList<ThongKeTemp> listTemp = new ArrayList<>();
+        int sumSL = 0, sumDT = 0;
+        String valuesSpinner = spinnerChonSL();
+
         for(ThongKeTemp tk : list){
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(tk.getNgayDat());
             Date dTu = new SimpleDateFormat("dd/MM/yyyy").parse(tgTu);
             Date dDen = new SimpleDateFormat("dd/MM/yyyy").parse(tgDen);
 
             if(tk.getNgayDat() != null && dTu.getTime() <= date.getTime() && date.getTime() <= dDen.getTime()){
-
-                listTemp.add(tk);
-                load(listTemp);
-                Log.d("TAG",listTemp.toString());
+                if(!valuesSpinner.equals("...")){
+                    listTemp.add(tk);
+                    sumSL = sumSL + tk.getSoLuong();
+                    sumDT = sumDT + tk.getGiaBan();
+                    load(listTemp);
+                    TextViewTongSLbanduoc.setText(String.valueOf(sumSL));
+                    formatGiaTien(sumDT);
+                    Log.d("TAG",listTemp.toString());
+                    Log.d("SL sau loc", String.valueOf(sumSL));
+                } else{
+                    Log.d("spinner",valuesSpinner);
+                    Toast.makeText(ThongKeActivity.this, "get values spinner: "+valuesSpinner, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -161,15 +184,20 @@ public class ThongKeActivity extends AppCompatActivity {
         });
         spinnerChonSL();
         searchTK.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 tgTu = editTextDateTu.getText().toString().trim();
                 tgDen = editTextDateDen.getText().toString().trim();
 
+                String valuesSpinner = spinnerChonSL();
+
                 if(tgTu.length()>0&&tgDen.length()>0) {
                     if(ktThoiGian(tgTu,tgDen)==true){
                         try {
-                            loadXeDK(tgTu,tgDen);
+                            if(valuesSpinner.equals("...")){
+                                loadXeDK(tgTu,tgDen);
+                            } else {
+                                loadXeDKLimit(tgTu,tgDen,strInput);
+                            }
                             Log.d("tg",tgTu+"-"+tgDen);
                             Log.d("sl", String.valueOf(i));
                             Toast.makeText(ThongKeActivity.this, tgTu+"-"+tgDen, Toast.LENGTH_SHORT).show();
@@ -191,8 +219,8 @@ public class ThongKeActivity extends AppCompatActivity {
         return new SimpleDateFormat("yyyyMMdd").format(date);
     }
 
-    public void spinnerChonSL(){
-        final String[] strItem = {"1","2","3"};
+    public String spinnerChonSL(){
+        final String[] strItem = {"...","1","2","3"};
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strItem);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         SpinnerSL.setAdapter(dataAdapter);
@@ -202,20 +230,12 @@ public class ThongKeActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Object getItem = parent.getItemAtPosition(position);
-
-                tgTu = editTextDateTu.getText().toString().trim();
-                tgDen = editTextDateDen.getText().toString().trim();
-
-                try {
-                    loadXeDKLimit(tgTu,tgDen,getItem.toString());
-                    Toast.makeText(ThongKeActivity.this, getItem.toString(), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                strInput = String.valueOf(getItem);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+        return strInput;
     }
 
     private void imageSelectDateDen() {

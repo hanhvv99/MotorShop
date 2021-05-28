@@ -49,7 +49,7 @@ public class StatisticActivity extends AppCompatActivity {
     private ArrayList<ThongKeTemp> data;
     ThongKeTempAdapter thongKeTempAdapter;
 
-    String tgTu, tgDen; int i;
+    String tgTu, tgDen; int i;String strInput;
     DBManager db = new DBManager(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +71,28 @@ public class StatisticActivity extends AppCompatActivity {
     public void loadPhuTungDKLimit(String tgTu, String tgDen, String i) throws Exception {
         ArrayList<ThongKeTemp> list = db.loadPTtheoTGLimit(i);
         ArrayList<ThongKeTemp> listTemp = new ArrayList<>();
+        int sumSL = 0, sumDT = 0;
+        String valuesSpinner = spinnerChonSL();
+
         for(ThongKeTemp tk : list){
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(tk.getNgayDat());
             Date dTu = new SimpleDateFormat("dd/MM/yyyy").parse(tgTu);
             Date dDen = new SimpleDateFormat("dd/MM/yyyy").parse(tgDen);
 
             if(tk.getNgayDat() != null && dTu.getTime() <= date.getTime() && date.getTime() <= dDen.getTime()){
-
-                listTemp.add(tk);
-                load(listTemp);
-                Log.d("TAG",listTemp.toString());
+                if(!valuesSpinner.equals("...")){
+                    listTemp.add(tk);
+                    sumSL = sumSL + tk.getSoLuong();
+                    sumDT = sumDT + tk.getGiaBan();
+                    load(listTemp);
+                    TextViewTongSLbanduoc.setText(String.valueOf(sumSL));
+                    formatGiaTien(sumDT);
+                    Log.d("TAG",listTemp.toString());
+                    Log.d("SL sau loc", String.valueOf(sumSL));
+                } else{
+                    Log.d("spinner",valuesSpinner);
+                    Toast.makeText(StatisticActivity.this, "get values spinner: "+valuesSpinner, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -89,6 +101,7 @@ public class StatisticActivity extends AppCompatActivity {
         ArrayList<ThongKeTemp> list = db.loadPTtheoTG();
         ArrayList<ThongKeTemp> listTemp = new ArrayList<>();
         int sumSL = 0, sumDT = 0;
+        String valuesSpinner = spinnerChonSL();
 
         for(ThongKeTemp tk : list){
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(tk.getNgayDat());
@@ -97,14 +110,19 @@ public class StatisticActivity extends AppCompatActivity {
 
             if(tk.getNgayDat() != null && dTu.getTime() <= date.getTime() && date.getTime() <= dDen.getTime()){
 
-                listTemp.add(tk);
-                sumSL = sumSL + tk.getSoLuong();
-                sumDT = sumDT + tk.getGiaBan();
-                load(listTemp);
-                TextViewTongSLbanduoc.setText(String.valueOf(sumSL));
-                formatGiaTien(sumDT);
-                Log.d("TAG",listTemp.toString());
-                Log.d("SL sau loc", String.valueOf(sumSL));
+                if(valuesSpinner.equals("...")){
+                    listTemp.add(tk);
+                    sumSL = sumSL + tk.getSoLuong();
+                    sumDT = sumDT + tk.getGiaBan();
+                    load(listTemp);
+                    TextViewTongSLbanduoc.setText(String.valueOf(sumSL));
+                    formatGiaTien(sumDT);
+                    Log.d("TAG",listTemp.toString());
+                    Log.d("SL sau loc", String.valueOf(sumSL));
+                } else{
+                    Log.d("spinner",valuesSpinner);
+                    Toast.makeText(StatisticActivity.this, "get values spinner: "+valuesSpinner, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -168,10 +186,16 @@ public class StatisticActivity extends AppCompatActivity {
                 tgTu = editTextDateTu.getText().toString().trim();
                 tgDen = editTextDateDen.getText().toString().trim();
 
+                String valuesSpinner = spinnerChonSL();
+
                 if(tgTu.length()>0&&tgDen.length()>0) {
                     if(ktThoiGian(tgTu,tgDen)==true){
                         try {
-                            loadPhuTungDK(tgTu,tgDen);
+                            if(valuesSpinner.equals("...")){
+                                loadPhuTungDK(tgTu,tgDen);
+                            } else {
+                                loadPhuTungDKLimit(tgTu,tgDen,strInput);
+                            }
                             Log.d("tg",tgTu+"-"+tgDen);
                             Log.d("sl", String.valueOf(i));
                             Toast.makeText(StatisticActivity.this, tgTu+"-"+tgDen, Toast.LENGTH_SHORT).show();
@@ -193,8 +217,8 @@ public class StatisticActivity extends AppCompatActivity {
         return new SimpleDateFormat("yyyyMMdd").format(date);
     }
 
-    public void spinnerChonSL(){
-        final String[] strItem = {"1","2","3"};
+    public String spinnerChonSL(){
+        final String[] strItem = {"...","1","2","3"};
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strItem);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         SpinnerSL.setAdapter(dataAdapter);
@@ -204,20 +228,12 @@ public class StatisticActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Object getItem = parent.getItemAtPosition(position);
-
-                tgTu = editTextDateTu.getText().toString().trim();
-                tgDen = editTextDateDen.getText().toString().trim();
-
-                try {
-                    loadPhuTungDKLimit(tgTu,tgDen,getItem.toString());
-                    Toast.makeText(StatisticActivity.this, getItem.toString(), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                strInput = String.valueOf(getItem);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+        return strInput;
     }
 
     private void imageSelectDateDen() {

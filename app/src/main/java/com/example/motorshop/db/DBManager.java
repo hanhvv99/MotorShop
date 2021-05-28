@@ -1168,9 +1168,10 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     public ArrayList<ThongKeTemp> loadXeTheoTG() {
-        String selectQuery = "SELECT X.TENXE,SUM(C.SOLUONG) AS SOLUONG, (C.DONGIABAN), D.NGAYDAT FROM chitietdondatxe C, DONDATHANG D, XE X " +
+        String selectQuery = "SELECT X.TENXE,SUM(C.SOLUONG) AS SOLUONG, (C.DONGIABAN), D.NGAYDAT " +
+                "FROM chitietdondatxe C, DONDATHANG D, XE X " +
                 "WHERE X.MAXE = C.MAXE AND C.MADH = D.MADH "+
-                "group BY X.MAXE ORDER BY C.SOLUONG DESC";
+                "group BY X.MAXE ORDER BY C.SOLUONG DESC ";
 
         ArrayList<ThongKeTemp> list = cursorSQLArrTK(selectQuery);
         return list;
@@ -1187,7 +1188,8 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     public ArrayList<ThongKeTemp> loadXeTheoTGLimit(String i) {
-        String selectQuery = "SELECT X.TENXE,SUM(C.SOLUONG) AS SOLUONG, (C.DONGIABAN), D.NGAYDAT FROM chitietdondatxe C, DONDATHANG D, XE X " +
+        String selectQuery = "SELECT X.TENXE,SUM(C.SOLUONG) AS SOLUONG, (C.DONGIABAN), D.NGAYDAT " +
+                "FROM chitietdondatxe C, DONDATHANG D, XE X " +
                 "WHERE X.MAXE = C.MAXE AND C.MADH = D.MADH "+
                 "group BY X.MAXE ORDER BY C.SOLUONG DESC LIMIT "+i;
 
